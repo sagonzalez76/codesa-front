@@ -20,7 +20,7 @@ import { ThemeService } from '../../services/theme.service';
     RouterOutlet,
     PanelMenuModule,
     ButtonModule,
-    MenuModule // ✅ nuevo
+    MenuModule
   ]
 })
 export class DashboardLayoutComponent implements OnInit {
@@ -42,7 +42,6 @@ export class DashboardLayoutComponent implements OnInit {
     this.themeService.loadStoredTheme();
     this.selectedTheme = localStorage.getItem('selected-theme') || 'lara-light-blue';
 
-    // ✅ Definimos las opciones del menú contextual
     this.themeMenuItems = [
       {
         label: 'Lara Claro',
@@ -58,6 +57,11 @@ export class DashboardLayoutComponent implements OnInit {
         label: 'Vela Oscuro',
         icon: 'pi pi-palette',
         command: () => this.changeTheme('vela-blue')
+      },
+      {
+        label: 'Viva Oscuro',
+        icon: 'pi pi-star',
+        command: () => this.changeTheme('viva-dark')
       }
     ];
   }
