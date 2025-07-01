@@ -1,6 +1,5 @@
 <p-confirmDialog></p-confirmDialog>
 
-<!-- Botón para nuevo profesor -->
 <div class="title-bar">
   <h2 class="text-lg">Módulo de Profesores</h2>
   <p-button
@@ -11,7 +10,6 @@
   ></p-button>
 </div>
 
-<!-- Tabla -->
 <p-table
   [value]="teachers"
   [paginator]="true"
@@ -62,7 +60,6 @@
   </ng-template>
 </p-table>
 
-<!-- Modal -->
 <p-dialog
   [(visible)]="showDialog"
   [modal]="true"
