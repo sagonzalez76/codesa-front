@@ -163,9 +163,12 @@ export class TeacherListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
         this.teacherService.delete(id).subscribe(() => {
-          this.loadTeachersLazy({ first: 0, rows: this.rows });
+          this.loadTeachersLazy({ first: 0, rows: this.rows, sortField: this.sortField, sortOrder: this.sortOrder });
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Profesor eliminado', life: 3000 });
+
         });
       }
+      
     });
   }
 }
