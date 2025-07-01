@@ -1,0 +1,124 @@
+/* CONTENEDOR GENERAL */
+.register-wrapper {
+  display: flex;
+  height: 98dvh;
+  overflow: hidden;
+  background-color: var(--surface-ground);
+}
+
+/* Imagen lateral */
+.register-image {
+  flex: 1;
+  background-image: url('assets/images/login-image.webp');
+  background-size: cover;
+  background-position: center;
+  display: block;
+}
+
+/* Formulario */
+.register-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-2);
+  z-index: 1;
+  position: relative;
+}
+
+/* Logo */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.logo-container img {
+  height: 40px;
+  filter: invert(1);
+  /* Útil en temas claros */
+}
+
+.logo-container span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Título */
+h2 {
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* Tarjeta del formulario */
+.register-card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.p-field {
+  margin-bottom: 1.5rem;
+}
+
+/* Enlace a login */
+.register-link {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-color-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.register-link .p-button-link {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0;
+  background: none;
+  border: none;
+}
+
+.register-link .p-button-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .register-wrapper {
+    flex-direction: column;
+  }
+
+  .register-image {
+    display: none;
+  }
+
+  .register-form {
+    width: 100%;
+    padding: 2rem;
+    box-shadow: none;
+    background: var(--surface-card);
+  }
+
+  .register-card {
+    padding: 1.5rem;
+    box-shadow: none;
+  }
+
+  .logo-container {
+    margin-bottom: 1rem;
+  }
+}

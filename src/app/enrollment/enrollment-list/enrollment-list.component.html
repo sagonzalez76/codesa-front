@@ -1,0 +1,159 @@
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="title-bar">
+  <h2 class="text-lg">Módulo de Inscripciones</h2>
+  <p-button
+    label="Nueva Inscripción"
+    icon="pi pi-plus"
+    styleClass="p-button-success"
+    (click)="createEnrollment()"
+  ></p-button>
+</div>
+
+<!-- Tabla de Inscripciones -->
+<p-table
+  [value]="enrollments"
+  [paginator]="true"
+  [rows]="rows"
+  [totalRecords]="totalRecords"
+  [lazy]="true"
+  [loading]="loading"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
+  (onLazyLoad)="loadEnrollments($event)"
+  dataKey="id"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Estudiante</th>
+      <th>Curso</th>
+      <th>Fecha</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-inscripcion>
+    <tr>
+      <td>{{ getStudentName(inscripcion.idEstudiante) }}</td>
+      <td>{{ getCourseName(inscripcion.idCurso) }}</td>
+      <td>{{ inscripcion.fechaInscripcion | date : "yyyy-MM-dd" }}</td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          (click)="editEnrollment(inscripcion)"
+          styleClass="p-button-text"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          (click)="deleteEnrollment(inscripcion.id)"
+          styleClass="p-button-danger p-button-text"
+        ></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Diálogo -->
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [closable]="!saving"
+  [responsive]="true"
+  [style]="{ width: '100%', maxWidth: '500px' }"
+  header="{{ editingEnrollment ? 'Editar Inscripción' : 'Nueva Inscripción' }}"
+>
+  <form
+    [formGroup]="enrollmentForm"
+    (ngSubmit)="saveEnrollment()"
+    class="dialog-form"
+    autocomplete="off"
+  >
+    <div class="form-group">
+      <label for="idEstudiante">Estudiante</label>
+      <p-dropdown
+        inputId="idEstudiante"
+        [options]="students"
+        optionLabel="nombre"
+        optionValue="id"
+        formControlName="idEstudiante"
+        placeholder="Seleccione un estudiante"
+      ></p-dropdown>
+      <small
+        class="error-message"
+        *ngIf="
+          enrollmentForm.get('idEstudiante')?.invalid &&
+          enrollmentForm.get('idEstudiante')?.dirty
+        "
+      >
+        Seleccione un estudiante.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="idCurso">Curso</label>
+      <p-dropdown
+        inputId="idCurso"
+        [options]="courses"
+        optionLabel="nombre"
+        optionValue="id"
+        formControlName="idCurso"
+        placeholder="Seleccione un curso"
+      ></p-dropdown>
+      <small
+        class="error-message"
+        *ngIf="
+          enrollmentForm.get('idCurso')?.invalid &&
+          enrollmentForm.get('idCurso')?.dirty
+        "
+      >
+        Seleccione un curso.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="fechaInscripcion">Fecha de Inscripción</label>
+      <p-calendar
+        inputId="fechaInscripcion"
+        formControlName="fechaInscripcion"
+        dateFormat="yy-mm-dd"
+        [showIcon]="true"
+        appendTo="body"
+      ></p-calendar>
+      <small
+        class="error-message"
+        *ngIf="
+          enrollmentForm.get('fechaInscripcion')?.invalid &&
+          enrollmentForm.get('fechaInscripcion')?.dirty
+        "
+      >
+        Seleccione una fecha válida.
+      </small>
+    </div>
+
+    <div class="button-group">
+      <button
+        pButton
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        type="button"
+        (click)="showDialog = false"
+        [disabled]="saving"
+      ></button>
+
+      <button
+        pButton
+        icon="pi pi-check"
+        class="p-button-primary"
+        type="submit"
+        [disabled]="enrollmentForm.invalid || saving"
+        (click)="saveEnrollment()"
+      >
+        <i *ngIf="saving" class="pi pi-spin pi-spinner mr-2"></i>
+        Guardar
+      </button>
+    </div>
+  </form>
+</p-dialog>

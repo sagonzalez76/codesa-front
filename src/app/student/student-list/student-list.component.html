@@ -1,0 +1,256 @@
+<p-confirmDialog></p-confirmDialog>
+
+<!-- Encabezado -->
+<div class="title-bar">
+  <h2 class="text-lg">Módulo de Estudiantes</h2>
+  <p-button
+    label="Nuevo Estudiante"
+    icon="pi pi-plus"
+    styleClass="p-button-success"
+    (click)="createStudent()"
+  ></p-button>
+</div>
+
+<!-- Tabla de estudiantes -->
+<p-table
+  [value]="students"
+  [paginator]="true"
+  [rows]="rows"
+  [totalRecords]="totalRecords"
+  [lazy]="true"
+  [loading]="loading"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [sortField]="sortField"
+  [sortOrder]="sortOrder"
+  (onLazyLoad)="loadStudentsLazy($event)"
+  dataKey="id"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="nombre">Nombre <p-sortIcon field="nombre" /></th>
+      <th pSortableColumn="apellido">
+        Apellido <p-sortIcon field="apellido" />
+      </th>
+      <th>Email</th>
+      <th>Teléfono</th>
+      <th>Grado</th>
+      <th>Matrícula</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-student>
+    <tr>
+      <td>{{ student.nombre }}</td>
+      <td>{{ student.apellido }}</td>
+      <td>{{ student.email }}</td>
+      <td>{{ student.telefono }}</td>
+      <td>{{ student.grado }}</td>
+      <td>{{ student.numeroMatricula }}</td>
+      <td>
+        <p-button
+          icon="pi pi-pencil"
+          (click)="editStudent(student.id)"
+          styleClass="p-button-text"
+        />
+        <p-button
+          icon="pi pi-trash"
+          (click)="deleteStudent(student.id)"
+          styleClass="p-button-danger p-button-text"
+        />
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<!-- Modal para crear/editar -->
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [closable]="!saving"
+  [responsive]="true"
+  [style]="{ width: '100%', maxWidth: '500px' }"
+  [dismissableMask]="!saving"
+  [closeOnEscape]="!saving"
+  header="{{ editingStudent ? 'Editar Estudiante' : 'Nuevo Estudiante' }}"
+>
+  <form
+    [formGroup]="studentForm"
+    (ngSubmit)="saveStudent()"
+    class="dialog-form"
+    autocomplete="off"
+  >
+    <!-- Nombre -->
+    <div class="form-group">
+      <label for="nombre">Nombre</label>
+      <input
+        id="nombre"
+        pInputText
+        formControlName="nombre"
+        placeholder="Nombre"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('nombre')?.invalid && studentForm.get('nombre')?.dirty
+        "
+      >
+        El nombre es obligatorio.
+      </small>
+    </div>
+
+    <!-- Apellido -->
+    <div class="form-group">
+      <label for="apellido">Apellido</label>
+      <input
+        id="apellido"
+        pInputText
+        formControlName="apellido"
+        placeholder="Apellido"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('apellido')?.invalid &&
+          studentForm.get('apellido')?.dirty
+        "
+      >
+        El apellido es obligatorio.
+      </small>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        pInputText
+        formControlName="email"
+        type="email"
+        placeholder="ejemplo@correo.com"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('email')?.invalid && studentForm.get('email')?.dirty
+        "
+      >
+        Debes ingresar un email válido.
+      </small>
+    </div>
+
+    <!-- Teléfono -->
+    <div class="form-group">
+      <label for="telefono">Teléfono</label>
+      <input
+        id="telefono"
+        pInputText
+        formControlName="telefono"
+        maxlength="10"
+        pKeyFilter="num"
+        placeholder="Ej: 3101234567"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('telefono')?.invalid &&
+          studentForm.get('telefono')?.dirty
+        "
+      >
+        El teléfono es obligatorio.
+      </small>
+    </div>
+
+    <!-- Fecha Nacimiento -->
+    <div class="form-group">
+      <label for="fechaNacimiento">Fecha Nacimiento</label>
+      <p-calendar
+        id="fechaNacimiento"
+        formControlName="fechaNacimiento"
+        [showIcon]="true"
+        dateFormat="yy-mm-dd"
+        [maxDate]="maxDate"
+        [minDate]="minDate"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1900:2025"
+        [showButtonBar]="true"
+        appendTo="body"
+      ></p-calendar>
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('fechaNacimiento')?.invalid &&
+          studentForm.get('fechaNacimiento')?.dirty
+        "
+      >
+        La fecha de nacimiento es obligatoria.
+      </small>
+    </div>
+
+    <!-- Número Matrícula (ejemplo de campo deshabilitado) -->
+    <div class="form-group">
+      <label for="numeroMatricula">Matrícula</label>
+      <input
+        id="numeroMatricula"
+        pInputText
+        formControlName="numeroMatricula"
+        placeholder="Ej: ESTU1000        "
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('matricula')?.invalid &&
+          studentForm.get('matricula')?.dirty
+        "
+      >
+        La matrícula es obligatoria.
+      </small>
+    </div>
+
+    <!-- Grado -->
+    <div class="form-group">
+      <label for="grado">Grado</label>
+      <input
+        id="grado"
+        pInputText
+        formControlName="grado"
+        placeholder="Ej: 10A"
+      />
+      <small
+        class="error-message"
+        *ngIf="
+          studentForm.get('grado')?.invalid && studentForm.get('grado')?.dirty
+        "
+      >
+        El grado es obligatorio.
+      </small>
+    </div>
+
+    <!-- Botones -->
+    <div class="button-group">
+      <button
+        pButton
+        label="Cancelar"
+        icon="pi pi-times"
+        styleClass="p-button-text"
+        type="button"
+        (click)="showDialog = false"
+        [disabled]="saving"
+      ></button>
+      <button
+        pButton
+        class="p-button-primary"
+        type="submit"
+        [disabled]="studentForm.invalid || saving"
+        (click)="saveStudent()"
+      >
+        <i *ngIf="saving" class="pi pi-spin pi-spinner mr-2"></i>
+        <i *ngIf="!saving" class="pi pi-check mr-2"></i>
+        Guardar
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-toast></p-toast>

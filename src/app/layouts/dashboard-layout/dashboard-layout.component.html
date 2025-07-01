@@ -1,0 +1,48 @@
+<div
+  class="layout-wrapper"
+  [ngClass]="{ 'layout-mobile-active': mobileSidebarActive }"
+>
+  <!-- Topbar -->
+  <div class="topbar">
+    <button class="menu-toggle" (click)="toggleMobileSidebar()">
+      <i class="pi pi-bars"></i>
+    </button>
+
+    <div class="logo">
+      <img
+        src="https://www.codesa.com.co/wp-content/uploads/2021/06/codesa-logo.png"
+        alt="Logo CODESA"
+      />
+      <span>EscolarApp</span>
+    </div>
+
+    <div class="topbar-right">
+      <!-- Paleta -->
+      <button #themeButton pButton icon="pi pi-palette" class="p-button-text" (click)="themeMenu.toggle($event)"></button>
+      <p-menu #themeMenu [popup]="true" [model]="themeMenuItems"></p-menu>
+
+      <!-- Botón de usuario -->
+      <button pButton icon="pi pi-user" class="p-button-text"></button>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" (click)="$event.stopPropagation()">
+    <p-panelMenu [model]="menuItems" [style]="{ width: '100%' }"></p-panelMenu>
+    <div class="logout-button">
+      <button
+        pButton
+        icon="pi pi-sign-out"
+        label="Cerrar sesión"
+        class="p-button-danger w-full"
+        (click)="logout()"
+      ></button>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <div class="main-content" (click)="mobileSidebarActive = false">
+    <router-outlet></router-outlet>
+  </div>
+</div>
