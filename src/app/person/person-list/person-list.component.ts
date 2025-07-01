@@ -191,6 +191,7 @@ export class PersonListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
         this.personService.delete(id).subscribe(() => {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Persona eliminada' });
           this.loadPersonsLazy({ first: 0, rows: this.rows, sortField: this.sortField, sortOrder: this.sortOrder });
         });
       }

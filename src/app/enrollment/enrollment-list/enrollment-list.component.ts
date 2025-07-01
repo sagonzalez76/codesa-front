@@ -128,20 +128,25 @@ export class EnrollmentListComponent implements OnInit {
       this.saving = false;
     };
 
-    const errorHandler = (msg: string) => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+    const handleError = (err: any, fallback: string) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: err.error?.mensaje || fallback,
+        life: 3000
+      });
       this.saving = false;
     };
 
     if (formValue.id) {
       this.enrollmentService.update(formValue.id, formValue).subscribe({
         next: () => successHandler('Inscripción actualizada'),
-        error: () => errorHandler('Error al actualizar la inscripción')
+        error: err => handleError(err, 'Error al actualizar el profesor')
       });
     } else {
       this.enrollmentService.create(formValue).subscribe({
         next: () => successHandler('Inscripción creada'),
-        error: () => errorHandler('Error al crear inscripción')
+        error: err => handleError(err, 'Error al crear el profesor')
       });
     }
   }

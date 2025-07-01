@@ -14,6 +14,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { DropdownModule } from 'primeng/dropdown';
+
 
 @Component({
   selector: 'app-student-list',
@@ -30,7 +32,8 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     ConfirmDialogModule,
     ToastModule,
     CalendarModule,
-    KeyFilterModule
+    KeyFilterModule,
+    DropdownModule
   ],
   providers: [ConfirmationService, MessageService]
 })
@@ -50,6 +53,14 @@ export class StudentListComponent implements OnInit {
 
   maxDate: Date = new Date();
   minDate: Date = new Date(1900, 0, 1);
+
+  gradeOptions = Array.from({ length: 11 }, (_, i) => i + 1)
+    .flatMap(n => ['A', 'B', 'C'].map(suffix => {
+      const grado = `${n}${suffix}`;
+      return { label: grado, value: grado };
+    }));
+
+
 
   constructor(
     private studentService: StudentService,
@@ -175,6 +186,7 @@ export class StudentListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
         this.studentService.delete(id).subscribe(() => {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Estudiante eliminado' });
           this.loadStudentsLazy({ first: 0, rows: this.rows, sortField: this.sortField, sortOrder: this.sortOrder });
         });
       }

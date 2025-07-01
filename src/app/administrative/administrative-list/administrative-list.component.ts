@@ -172,6 +172,7 @@ export class AdministrativoListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
         this.administrativoService.delete(id).subscribe(() => {
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Administrativo eliminado' });
           this.loadAdministrativosLazy({ first: 0, rows: this.rows, sortField: this.sortField, sortOrder: this.sortOrder });
         });
       }

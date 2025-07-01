@@ -50,10 +50,17 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           localStorage.setItem('authToken', response.token);
-          this.router.navigate(['/personas']); // o ruta deseada post-login
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Inicio de sesión exitoso',
+            detail: 'Bienvenido',
+            life: 3000
+          })
+          setTimeout(() => {
+            this.router.navigate(['/personas']);
+          }, 1500);
         },
         error: err => {
-          console.log(err);
           const errorMsg = err.error?.mensaje || 'Credenciales inválidas';
           this.messageService.add({
             severity: 'error',

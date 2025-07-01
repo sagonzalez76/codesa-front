@@ -209,14 +209,17 @@
     </div>
 
     <!-- Grado -->
+    <!-- Grado -->
     <div class="form-group">
       <label for="grado">Grado</label>
-      <input
+      <p-dropdown
         id="grado"
-        pInputText
+        [options]="gradeOptions"
         formControlName="grado"
-        placeholder="Ej: 10A"
-      />
+        placeholder="Seleccione un grado"
+        optionLabel="label"
+        optionValue="value"
+      ></p-dropdown>
       <small
         class="error-message"
         *ngIf="

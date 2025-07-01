@@ -120,20 +120,25 @@ export class CourseListComponent implements OnInit {
       this.saving = false;
     };
 
-    const onError = (msg: string) => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+    const handleError = (err: any, fallback: string) => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: err.error?.mensaje || fallback,
+        life: 3000
+      });
       this.saving = false;
     };
 
     if (formValue.id) {
       this.courseService.update(formValue.id, formValue).subscribe({
         next: () => onSuccess('Curso actualizado'),
-        error: () => onError('Error al actualizar curso')
+        error: err => handleError(err, 'Error al actualizar el profesor')
       });
     } else {
       this.courseService.create(formValue).subscribe({
         next: () => onSuccess('Curso creado'),
-        error: () => onError('Error al crear curso')
+        error: err => handleError(err, 'Error al actualizar el profesor')
       });
     }
   }
