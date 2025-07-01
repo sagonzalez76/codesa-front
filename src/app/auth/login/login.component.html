@@ -2,9 +2,23 @@
   <div class="login-image"></div>
 
   <div class="login-form">
+    <!-- Botón de cambio de tema -->
+    <div class="theme-switcher-container">
+      <button
+        pButton
+        icon="pi pi-palette"
+        class="p-button-text p-button-sm"
+        (click)="themeMenu.toggle($event)"
+      ></button>
+      <p-menu #themeMenu [popup]="true" [model]="themeMenuItems"></p-menu>
+    </div>
+
     <!-- Logo -->
     <div class="logo-container">
-      <img src="https://www.codesa.com.co/wp-content/uploads/2021/06/codesa-logo.png" alt="Logo CODESA" class="inverted-logo"
+      <img
+        src="https://www.codesa.com.co/wp-content/uploads/2021/06/codesa-logo.png"
+        alt="Logo CODESA"
+        class="inverted-logo"
       />
       <span>EscolarApp</span>
     </div>
@@ -21,7 +35,13 @@
 
       <div class="p-field">
         <label for="password">Contraseña</label>
-        <input id="password" pPassword formControlName="password" type="password" [feedback]="false" />
+        <input
+          id="password"
+          pPassword
+          formControlName="password"
+          type="password"
+          [feedback]="false"
+        />
       </div>
 
       <button
@@ -43,7 +63,6 @@
         routerLink="/register"
       ></button>
     </div>
-
   </div>
 </div>
 

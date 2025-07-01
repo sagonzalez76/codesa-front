@@ -11,6 +11,10 @@ import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { ThemeService } from '../../services/theme.service';
+import { MenuModule } from 'primeng/menu';
+
 
 @Component({
   selector: 'app-login',
@@ -24,7 +28,8 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     MessageModule,
     ToastModule,
-    RouterModule
+    RouterModule,
+    MenuModule
   ],
   providers: [MessageService],
 
@@ -38,8 +43,45 @@ export class LoginComponent {
   });
 
   errorMsg: string | null = null;
+  themeMenuItems: MenuItem[] = [];
 
-  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, private messageService: MessageService) { }
+
+  constructor(private fb: FormBuilder, private router: Router, private http: HttpClient, private messageService: MessageService, private themeService: ThemeService) { }
+
+  changeTheme(themeName: string) {
+    localStorage.setItem('selected-theme', themeName);
+    this.themeService.changeTheme(themeName);
+  }
+
+  ngOnInit(): void {
+    this.themeMenuItems = [
+      {
+        label: 'Lara Claro',
+        icon: 'pi pi-sun',
+        command: () => this.changeTheme('lara-light-blue')
+      },
+      {
+        label: 'Lara Oscuro',
+        icon: 'pi pi-moon',
+        command: () => this.changeTheme('lara-dark-blue')
+      },
+      {
+        label: 'Vela Oscuro',
+        icon: 'pi pi-palette',
+        command: () => this.changeTheme('vela-blue')
+      },
+      {
+        label: 'Viva Oscuro',
+        icon: 'pi pi-star',
+        command: () => this.changeTheme('viva-dark')
+      }
+    ];
+
+    const stored = localStorage.getItem('selected-theme');
+    if (stored) {
+      this.themeService.changeTheme(stored);
+    }
+  }
 
   onSubmit() {
     if (this.form.invalid) return;
